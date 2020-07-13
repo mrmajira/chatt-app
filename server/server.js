@@ -15,9 +15,40 @@ io.on("connection",(socket)=>{
     socket.on("createMessage",(message)=>{
         message.createdAt=new Date().toTimeString();
         // message.createdAt=new Date().getTime();
-        io.emit("newMessage",message)
+
+        // io.emit("newMessage",message)
+
+        socket.broadcast.emit("newMessage",message)
     });
 
+    socket.emit("newMessage",{
+        text:`welcome to chat app`,
+        date:new Date().toTimeString()
+    });
+    socket.broadcast.emit("newMessage",{
+        text:`user joined server`,
+        date:new Date().toTimeString()
+    })
+
+    // socket.on("join",(message)=>{
+
+    //     message.date=new Date().toTimeString();
+    //     // let userM = {message};
+    //     // let allM = {message};
+
+    //     // userM.message.text=`welcome to server ${userM.message.user}`
+    //     // socket.emit("newMessage",userM.message);
+    //     // allM.message.text=`${allM.message.user} joined server`
+
+    //     socket.emit("newMessage",{
+    //         text:`welcome to server ${message.user}`,
+    //         date:message.date
+    //     });
+    //     socket.broadcast.emit("newMessage",{
+    //         text:`${message.user} joined server`,
+    //         date:message.date
+    //     })
+    // });
 
 
     

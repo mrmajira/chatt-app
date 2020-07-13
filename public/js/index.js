@@ -1,6 +1,8 @@
 let socket=io();
         
-
+// socket.on("connect",function(){
+//     socket.emit("join",{user:"test user"})
+// });
 
 
 socket.on("newMessage",function(message){
