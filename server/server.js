@@ -12,9 +12,30 @@ let io = socketIO(server);
 io.on("connection",(socket)=>{
     console.log("neww user connected");
 
-    socket.on("disconnect",(socket)=>{
+    // socket.emit("newEmail",{
+    //     from:"mista ",
+    //     text:"hey sup this my 1st mail, from server",
+    //     createdAt:6969
+    // });
+    // socket.on("createEmail",(newEmail)=>{
+    //     console.log("createEmail\n",newEmail);
+    // });
+
+    socket.on("disconnect",()=>{
         console.log("user disconnected");
     });
+
+    // newMessage & createMessage
+
+    socket.emit("newMessage",{
+        text:"chat test1",
+        createdAt:new Date().toString()
+    })
+    
+    socket.on("createMessage",(message)=>{
+        console.log(`New Message - Date:${new Date().toString()}`);
+        console.log(message);
+    })
 })
 
 
