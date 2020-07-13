@@ -14,12 +14,13 @@ let io = socketIO(server);
 io.on("connection",(socket)=>{
     console.log("neww user connected");
 
-    socket.on("createMessage",(message)=>{
-        // message.createdAt=new Date().toTimeString();
-        // message.createdAt=new Date().getTime();
+    socket.on("createMessage",(message, callback)=>{
+        console.log("createMessage :\n",message);
 
-        io.emit("newMessage",generateMessage(message.from,message.text))
-
+        io.emit("newMessage",generateMessage(message.from,message.text));
+        if(callback)
+        {callback("this is from server");}
+        callback();
         // socket.broadcast.emit("newMessage",generateMessage(message.from,message.text));
     });
 
