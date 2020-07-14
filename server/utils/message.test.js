@@ -8,7 +8,7 @@ describe("generateMessage",()=>{
             from:"me",
             text:"hey"
         });
-        expect(generateMessage("f","t").date).toBeTruthy();
+        expect(typeof generateMessage("f","t").date).toBe("number");
     });
 });
 
@@ -22,6 +22,6 @@ describe("generateLocationMessage",()=>{
             from:"me",
             url:`https://www.google.com/maps?q=69,69`
         });
-        expect(message.date).toBeTruthy();
+        expect(typeof message.date).toBe("number");
     });
 });

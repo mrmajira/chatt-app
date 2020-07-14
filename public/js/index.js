@@ -1,14 +1,14 @@
-let socket=io();
-        
+let socket  =   io();
+let date    =   moment;
 // socket.on("connect",function(){
 //     socket.emit("join",{user:"test user"})
 // });
 
 socket.on("newMessage",function(message){
-    console.log("new message:\n",message);
+    let formattedTime=date(message.date).subtract(1,"h").format("LT");
     let li= jQuery("<li></li>");
     // li.text(`- ${message.from}: ${message.text} | ${message.date}`);
-    li.text(`- ${message.from}: ${message.text}`);
+    li.text(`- ${message.from} (${formattedTime}) : ${message.text}`);
 
     jQuery("#messages").append(li);
 })
@@ -50,11 +50,12 @@ locationButton.on("click",function(){
 });
 
 socket.on("newLocationMessage",function(message){
+    let formattedTime=date(message.date).subtract(1,"h").format("LT");
     let li= jQuery("<li></li>");
-    let a= jQuery("<a target='_blank'>My Current location</a>");
+    let a= jQuery("<a target='_blank'>Anon. User current location</a>");
     let str = jQuery("<strong></strong>");
 
-    li.text(`- ${message.from}: `);
+    li.text(`- ${message.from} (${formattedTime}) : `);
     a.attr("href",` ${message.url}`);
 
     li.append(a); 
