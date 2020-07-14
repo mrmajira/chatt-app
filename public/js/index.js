@@ -1,8 +1,25 @@
+
 let socket  =   io();
 let date    =   moment;
-// socket.on("connect",function(){
-//     socket.emit("join",{user:"test user"})
-// });
+
+function scrollToBottom(send){
+    // slectors
+    let messages=jQuery("#messages");
+    let newMessage=messages.children("li:last-child");
+    // heights
+    let clientHeight = messages.prop("clientHeight");
+    let scrollTop = messages.prop("scrollTop");
+    let scrollHeight = messages.prop("scrollHeight");
+    let newMessageHeight = newMessage.innerHeight();
+    let lastMessageHeight = newMessage.prev().innerHeight();
+    // scrollBottom=scrollHeight-(scrollTop+clientHeight)
+
+    if(send){messages.scrollTop(scrollHeight)}
+    else if(clientHeight+scrollTop+newMessageHeight+lastMessageHeight >= scrollHeight){
+        console.log("should scroll");
+        messages.scrollTop(scrollHeight);
+    }
+}
 
 socket.on("newMessage",function(message){
     let formattedTime=date(message.date).subtract(1,"h").format("LT");
@@ -14,10 +31,7 @@ socket.on("newMessage",function(message){
     });
 
     jQuery("#messages").append(html);
-    // let li= jQuery("<li></li>");
-    // li.text(`- ${message.from} (${formattedTime}) : ${message.text}`);
-
-    // jQuery("#messages").append(li);
+    scrollToBottom(false);
 })
 
 socket.on("newLocationMessage",function(message){
@@ -31,16 +45,7 @@ socket.on("newLocationMessage",function(message){
     })
 
     jQuery("#messages").append(html);
-    // let li= jQuery("<li></li>");
-    // let a= jQuery("<a target='_blank'>Anon. User current location</a>");
-    // let str = jQuery("<strong></strong>");
-
-    // li.text(`- ${message.from} (${formattedTime}) : `);
-    // a.attr("href",` ${message.url}`);
-
-    // li.append(a); 
-    // // jQuery("#messages").append(str); 
-    // jQuery("#messages").append(li); 
+    scrollToBottom(false);
 })
 
 socket.on("disconnect",function(){
@@ -57,6 +62,7 @@ jQuery("#message-form").on("submit",function(e){
     },function(){
        messageTextBox.val("");
     });
+    scrollToBottom(true);
 });
 
 let locationButton= jQuery("#send-location");
@@ -71,11 +77,12 @@ locationButton.on("click",function(){
         socket.emit("createLocationMessage",{
             lng :position.coords.longitude,
             lat :position.coords.latitude
-        })
+        });
     },function(){
         locationButton.removeAttr("disabled").text("Send location");;
         alert("Unable to fetch location");
     });
+    scrollToBottom(true);
 });
 
 

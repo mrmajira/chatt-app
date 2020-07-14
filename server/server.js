@@ -16,7 +16,7 @@ io.on("connection",(socket)=>{
     console.log("neww user connected");
 
     socket.on("createMessage",(message, callback)=>{
-        console.log("createMessage :\n",message);
+        // console.log("createMessage :\n",message); // uncomment to see information exchange
 
         io.emit("newMessage",generateMessage(message.from,message.text));
         callback();
