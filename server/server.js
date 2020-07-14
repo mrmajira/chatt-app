@@ -1,4 +1,5 @@
-const   {generateMessage}   =   require("./utils/message");
+const   {generateMessage}           =   require("./utils/message"),
+        {generateLocationMessage}   =   require("./utils/message");
 
 const   path        =   require("path"),
         http        =   require("http"),
@@ -21,31 +22,15 @@ io.on("connection",(socket)=>{
         if(callback)
         {callback("this is from server");}
         callback();
-        // socket.broadcast.emit("newMessage",generateMessage(message.from,message.text));
     });
 
     socket.emit("newMessage",generateMessage("Admin","welcome to chat app"));
     socket.broadcast.emit("newMessage",generateMessage("Admin","new user joined"))
+    
+    socket.on("createLocationMessage",(cords)=>{
+        io.emit("newLocationMessage",generateLocationMessage("Admin",cords.lat,cords.lng ));
 
-    // socket.on("join",(message)=>{
-
-    //     message.date=new Date().toTimeString();
-    //     // let userM = {message};
-    //     // let allM = {message};
-
-    //     // userM.message.text=`welcome to server ${userM.message.user}`
-    //     // socket.emit("newMessage",userM.message);
-    //     // allM.message.text=`${allM.message.user} joined server`
-
-    //     socket.emit("newMessage",{
-    //         text:`welcome to server ${message.user}`,
-    //         date:message.date
-    //     });
-    //     socket.broadcast.emit("newMessage",{
-    //         text:`${message.user} joined server`,
-    //         date:message.date
-    //     })
-    // });
+    })
 
 
     
