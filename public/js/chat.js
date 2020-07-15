@@ -1,4 +1,3 @@
-
 let socket  =   io();
 let date    =   moment;
 
@@ -16,10 +15,26 @@ function scrollToBottom(send){
 
     if(send){messages.scrollTop(scrollHeight)}
     else if(clientHeight+scrollTop+newMessageHeight+lastMessageHeight >= scrollHeight){
-        console.log("should scroll");
+        // console.log("should scroll");
         messages.scrollTop(scrollHeight);
     }
 }
+
+socket.on("connect",function(){
+    let params=jQuery.deparam(window.location.search)
+    console.log(params);
+
+    socket.emit("join", params, function(err){
+        if(err){
+            console.log(err);
+            alert(err);
+            window.location.href="/"
+        }else{
+            console.log("no err");
+        }
+    })
+})
+
 
 socket.on("newMessage",function(message){
     let formattedTime=date(message.date).subtract(1,"h").format("LT");
@@ -85,6 +100,16 @@ locationButton.on("click",function(){
     scrollToBottom(true);
 });
 
+socket.on("updateUserList",function(usersList){
+    let ul=jQuery("<ul></ul>");
+    let users=jQuery("#users");
 
+    usersList.forEach((username)=>{
+        ul.append(jQuery("<li></li>").text(username));
+    });
+    users.html(ul);
+
+
+})
 
 
