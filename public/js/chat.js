@@ -55,7 +55,7 @@ socket.on("newLocationMessage",function(message){
     let html = Mustache.render(template,{
         from:message.from,
         url:message.url,
-        text:"Anon. User current location",
+        text:"My current location",
         date:formattedTime
     })
 
@@ -72,7 +72,6 @@ jQuery("#message-form").on("submit",function(e){
     e.preventDefault();
 
     socket.emit("createMessage",{
-        from:"Anonymous User",
         text:messageTextBox.val()
     },function(){
        messageTextBox.val("");

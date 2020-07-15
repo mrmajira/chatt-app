@@ -34,7 +34,6 @@ io.on("connection",(socket)=>{
         socket.broadcast.to(params.room)
         .emit("newMessage",generateMessage("Admin",`${params.name} joined`))
     
-        // socket.leave(params.room);
         callback();
     });
     
@@ -42,17 +41,20 @@ io.on("connection",(socket)=>{
     socket.on("createMessage",(message, callback)=>{
         // console.log("createMessage :\n",message); // uncomment to see information exchange
         let user = allUsers.getUser(socket.id);
-
-        io.to(user.room)
-        .emit("newMessage",generateMessage(user.name,message.text));
+        if(user && isRealString(message.text) ){
+            io.to(user.room)
+            .emit("newMessage",generateMessage(user.name,message.text));
+        }
         callback();
     });
     
     socket.on("createLocationMessage",(cords)=>{
         let user = allUsers.getUser(socket.id);
 
-        io.to(user.room)
-        .emit("newLocationMessage",generateLocationMessage("Admin",cords.lat,cords.lng ));
+        if(user){
+            io.to(user.room).emit("newLocationMessage",
+            generateLocationMessage(user.name,cords.lat,cords.lng ));
+        }
     });
 
 
